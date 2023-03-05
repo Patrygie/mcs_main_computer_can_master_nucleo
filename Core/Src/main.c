@@ -91,13 +91,13 @@ uint8_t can_low_value = 0;
 extern uint32_t TxMailbox;
 extern CAN_TxHeaderTypeDef TxHeader;
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == MAP_ID)
-	{
-
-	}
-}
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+//	if(GPIO_Pin == MAP_ID)
+//	{
+//
+//	}
+//}
 
 
 /* USER CODE END 0 */

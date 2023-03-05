@@ -60,8 +60,8 @@ all: main-build
 main-build: mcs_main_computer_can_master_nucleo.elf secondary-outputs
 
 # Tool invocations
-mcs_main_computer_can_master_nucleo.elf mcs_main_computer_can_master_nucleo.map: $(OBJS) $(USER_OBJS) D:\STM32CubeIDE_1.10.1\mcs_main_computer_can_master_nucleo\mcs_main_computer_can_master_nucleo\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "mcs_main_computer_can_master_nucleo.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\STM32CubeIDE_1.10.1\mcs_main_computer_can_master_nucleo\mcs_main_computer_can_master_nucleo\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mcs_main_computer_can_master_nucleo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+mcs_main_computer_can_master_nucleo.elf mcs_main_computer_can_master_nucleo.map: $(OBJS) $(USER_OBJS) D:\STM32CubeIDE\mcs_main\mcs_main_computer_can_master_nucleo\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "mcs_main_computer_can_master_nucleo.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\STM32CubeIDE\mcs_main\mcs_main_computer_can_master_nucleo\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mcs_main_computer_can_master_nucleo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
