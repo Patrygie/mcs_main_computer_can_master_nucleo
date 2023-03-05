@@ -54,13 +54,52 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//void CAN_Init(void);
+#define MCS_SCRN_ADDR 0x004Au
 
-uint8_t Write_Toggle_Green_LED_ID = 0xA3u;
-bool state = true;
-uint8_t data_length = 2;
+#define Print_Numbers_ID 0xB3u
+#define Write_Toggle_Green_LED_ID 0xA3u
+#define MAP_ID 0xC3
+#define TC_ID 0xD3
+#define SPEED_ID 0xE3
+#define DIFF_ID 0xF3
+#define TS_ID 0xF4
+#define LENG_ID 0xF5
+#define LINV_ID 0xF6
+#define BAT_ID 0xF7
+#define RINV_ID 0xF8
+#define RENG_ID 0xF9
+#define ERR_ID 0xFA
+#define HV_ID 0xFB
+#define LOW_ID 0xFC
+#define delay_t 17
+
+uint8_t can_map_value = 10;
+uint8_t can_tc_value = 212;
+uint8_t can_speed_value = 100;
+uint8_t can_diff_value = 120;
+uint8_t can_ts_value = 19;
+uint8_t can_leng_value = 45;
+uint8_t can_linv_value = 11;
+uint8_t can_bat_value = 88;
+uint8_t can_rinv_value = 88;
+uint8_t can_reng_value = 90;
+uint8_t can_err_value = 0;
+uint8_t can_hv_value = 0;
+uint8_t can_low_value = 0;
+
+
 extern uint32_t TxMailbox;
 extern CAN_TxHeaderTypeDef TxHeader;
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == MAP_ID)
+	{
+
+	}
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -101,22 +140,105 @@ int main(void)
 
   HAL_GPIO_WritePin(internalLED_GPIO_Port, internalLED_Pin, 1);
   HAL_Delay(2000);
-  HAL_GPIO_WritePin(internalLED_GPIO_Port, internalLED_Pin, 0);
 
- //0x4Fu adres slava
 
-  uint8_t data_frame[2] = {Write_Toggle_Green_LED_ID, state};
+  TxHeader.StdId = MCS_SCRN_ADDR;
 
-  TxHeader.DLC = 2;
-  TxHeader.StdId = 0x4Fu;
+  uint8_t data_length = 2;
+
+  uint8_t data_map_frame[2] = {MAP_ID, can_map_value};
+
+  uint8_t data_tc_frame[2] = {TC_ID, can_tc_value};
+
+  uint8_t data_speed_frame[2] = {SPEED_ID, can_speed_value};
+
+  uint8_t data_diff_frame[2] = {DIFF_ID, can_diff_value};
+
+  uint8_t data_ts_frame[2] = {TS_ID, can_ts_value};
+
+  uint8_t data_leng_frame[2] = {LENG_ID, can_leng_value};
+
+  uint8_t data_linv_frame[2] = {LINV_ID, can_linv_value};
+
+  uint8_t data_bat_frame[2] = {BAT_ID, can_bat_value};
+
+  uint8_t data_rinv_frame[2] = {RINV_ID, can_rinv_value};
+
+  uint8_t data_reng_frame[2] = {RENG_ID, can_reng_value};
+
+  uint8_t data_err_frame[2] = {ERR_ID, can_err_value};
+
+  uint8_t data_hv_frame[2] = {HV_ID, can_hv_value};
+
+  uint8_t data_low_frame[2] = {LOW_ID, can_low_value};
 
   while (1)
   {
-  CAN_Transmit(&TxHeader, data_length, data_frame, &TxMailbox);
+	  data_map_frame[1] += 5;
+	  CAN_Transmit(&TxHeader, data_length, data_map_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
 
-  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
-  HAL_Delay(1000);
-    /* USER CODE END WHILE */
+	  --data_tc_frame[1];
+	  CAN_Transmit(&TxHeader, data_length, data_tc_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_speed_frame[1]++;
+	  CAN_Transmit(&TxHeader, data_length, data_speed_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_diff_frame[1] += 12;
+	  CAN_Transmit(&TxHeader, data_length, data_diff_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_ts_frame[1] -= 12;
+	  CAN_Transmit(&TxHeader, data_length, data_ts_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_leng_frame[1] += 4;
+	  CAN_Transmit(&TxHeader, data_length, data_leng_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_linv_frame[1] -= 2;
+	  CAN_Transmit(&TxHeader, data_length, data_linv_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_bat_frame[1] += 8;
+	  CAN_Transmit(&TxHeader, data_length, data_bat_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_rinv_frame[1] += 8;
+	  CAN_Transmit(&TxHeader, data_length, data_rinv_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_reng_frame[1] -= 1;
+	  CAN_Transmit(&TxHeader, data_length, data_reng_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_err_frame[1]++;
+	  CAN_Transmit(&TxHeader, data_length, data_err_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_hv_frame[1]++;
+	  CAN_Transmit(&TxHeader, data_length, data_hv_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+
+	  data_low_frame[1]++;
+	  CAN_Transmit(&TxHeader, data_length, data_low_frame, &TxMailbox);
+	  HAL_GPIO_TogglePin(internalLED_GPIO_Port, internalLED_Pin);
+	  HAL_Delay(delay_t);
+	  /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
